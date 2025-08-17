@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Build output
+dist/
+.build/
+.vercel/
+.next/
+out/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
+
+# Local caches
+.cache/
+
+# Configs you DO want in version control — don't ignore these
+# (Fix: previously had 'vite.config.ts.*' which accidentally allowed committing variants)
+# Keep the actual config tracked:
+!vite.config.ts
+!tailwind.config.ts
+!postcss.config.js
+!tsconfig.json
