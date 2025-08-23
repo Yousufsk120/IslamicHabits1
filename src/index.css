@@ -1,0 +1,33 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  body {
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Islamic themed gradients and patterns */
+.islamic-gradient {
+  background: linear-gradient(135deg, #2d5f5f 0%, #1a4d4d 100%);
+}
+
+.islamic-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Prayer times styling */
+.prayer-time-card {
+  @apply bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-200 dark:border-slate-700;
+}
+
+/* Habit tracker styling */
+.habit-completed {
+  @apply bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200;
+}
+
+.habit-pending {
+  @apply bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200;
+}
