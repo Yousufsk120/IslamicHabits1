@@ -18,7 +18,9 @@ export default tseslint.config(
       "no-unused-vars": "warn",
       "no-undef": "off",
       "react-refresh/only-export-components": "warn"
-    },
+    }
+  },
+  {
     ignores: ["dist/", "node_modules/"]
   }
 );
