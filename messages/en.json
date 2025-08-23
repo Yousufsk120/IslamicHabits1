@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "Home",
+    "prayer": "Prayer",
+    "habits": "Habits", 
+    "tasbih": "Tasbih",
+    "settings": "Settings",
+    "kids": "Kids Mode",
+    "games": "Games"
+  },
+  "prayer": {
+    "fajr": "Fajr",
+    "sunrise": "Sunrise", 
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "next_prayer": "Next Prayer",
+    "until": "until",
+    "prayer_times": "Prayer Times"
+  },
+  "habits": {
+    "today_habits": "Today's Habits",
+    "completed": "completed",
+    "view_all": "View All Habits",
+    "progress": "Today's Progress",
+    "fajr_prayer": "Fajr Prayer",
+    "dhuhr_prayer": "Dhuhr Prayer", 
+    "asr_prayer": "Asr Prayer",
+    "maghrib_prayer": "Maghrib Prayer",
+    "isha_prayer": "Isha Prayer",
+    "witr_prayer": "Witr Prayer",
+    "quran_reading": "Quran Reading",
+    "morning_adhkar": "Morning Adhkar",
+    "evening_adhkar": "Evening Adhkar",
+    "durood": "Durood",
+    "duha_prayer": "Duha Prayer",
+    "qiyam": "Qiyam",
+    "monday_fasting": "Monday Fasting",
+    "thursday_fasting": "Thursday Fasting",
+    "charity": "Charity",
+    "parents_call": "Call Parents",
+    "gratitude": "Gratitude",
+    "screen_time": "Screen Time Limit",
+    "custom": "Custom Habit"
+  },
+  "tasbih": {
+    "quick_tasbih": "Quick Tasbih",
+    "subhanallah": "سُبْحَانَ اللّٰهِ",
+    "alhamdulillah": "الْحَمْدُ لِلّٰهِ", 
+    "allahu_akbar": "اللّٰهُ أَكْبَرُ",
+    "la_ilaha_illa_allah": "لَا إِلٰهَ إِلَّا اللّٰهُ",
+    "reset": "Reset"
+  },
+  "rewards": {
+    "neki_balance": "Neki Balance",
+    "coins": "coins",
+    "today": "today"
+  },
+  "auth": {
+    "signin": "Sign In",
+    "signup": "Sign Up", 
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "welcome_back": "Welcome back",
+    "create_account": "Create your account"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}

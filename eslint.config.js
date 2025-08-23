@@ -1,24 +1,36 @@
-/** @type {import('eslint').Linter.Config[]} */
-import js from "@eslint/js";
-import tseslint from "typescript-eslint";
-import reactRefresh from "eslint-plugin-react-refresh";
+const { resolve } = require("node:path");
 
-export default tseslint.config(
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  {
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module"
+const project = resolve(process.cwd(), "tsconfig.json");
+
+/** @type {import("eslint").Linter.Config} */
+module.exports = {
+  extends: [
+    "eslint:recommended",
+    "@typescript-eslint/recommended",
+    "next/core-web-vitals"
+  ],
+  plugins: ["@typescript-eslint"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project,
+  },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        project,
+      },
     },
-    plugins: {
-      "react-refresh": reactRefresh
+  },
+  ignorePatterns: [
+    // Ignore dotfiles
+    ".*.js",
+    "node_modules/",
+    "dist/",
+    ".next/",
+  ],
+  overrides: [
+    {
+      files: ["*.js?(x)", "*.ts?(x)"],
     },
-    rules: {
-      "no-unused-vars": "warn",
-      "no-undef": "off",
-      "react-refresh/only-export-components": "warn"
-    },
-    ignores: ["dist/", "node_modules/"]
-  }
-);
+  ],
+};

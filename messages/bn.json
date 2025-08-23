@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "হোম",
+    "prayer": "নামাজ",
+    "habits": "অভ্যাস", 
+    "tasbih": "তাসবীহ",
+    "settings": "সেটিংস",
+    "kids": "বাচ্চাদের মোড",
+    "games": "গেম"
+  },
+  "prayer": {
+    "fajr": "ফজর",
+    "sunrise": "সূর্যোদয়", 
+    "dhuhr": "যুহর",
+    "asr": "আসর",
+    "maghrib": "মাগরিব",
+    "isha": "ইশা",
+    "next_prayer": "পরবর্তী নামাজ",
+    "until": "পর্যন্ত",
+    "prayer_times": "নামাজের সময়"
+  },
+  "habits": {
+    "today_habits": "আজকের অভ্যাস",
+    "completed": "সম্পন্ন",
+    "view_all": "সব দেখুন",
+    "progress": "আজকের অগ্রগতি",
+    "fajr_prayer": "ফজরের নামাজ",
+    "dhuhr_prayer": "যুহরের নামাজ", 
+    "asr_prayer": "আসরের নামাজ",
+    "maghrib_prayer": "মাগরিবের নামাজ",
+    "isha_prayer": "ইশার নামাজ",
+    "witr_prayer": "বিতরের নামাজ",
+    "quran_reading": "কুরআন তিলাওয়াত",
+    "morning_adhkar": "সকালের আদকার",
+    "evening_adhkar": "সন্ধ্যার আদকার",
+    "durood": "দরূদ",
+    "duha_prayer": "দোহার নামাজ",
+    "qiyam": "কিয়াম",
+    "monday_fasting": "সোমবার রোজা",
+    "thursday_fasting": "বৃহস্পতিবার রোজা",
+    "charity": "দান",
+    "parents_call": "বাবা-মায়ের খোঁজ",
+    "gratitude": "কৃতজ্ঞতা",
+    "screen_time": "স্ক্রীন টাইম সীমা",
+    "custom": "কাস্টম অভ্যাস"
+  },
+  "tasbih": {
+    "quick_tasbih": "দ্রুত তাসবীহ",
+    "subhanallah": "سُبْحَانَ اللّٰهِ",
+    "alhamdulillah": "الْحَمْدُ لِلّٰهِ", 
+    "allahu_akbar": "اللّٰهُ أَكْبَرُ",
+    "la_ilaha_illa_allah": "لَا إِلٰهَ إِلَّا اللّٰهُ",
+    "reset": "রিসেট"
+  },
+  "rewards": {
+    "neki_balance": "নেকীর ব্যালেন্স",
+    "coins": "কয়েন",
+    "today": "আজ"
+  },
+  "auth": {
+    "signin": "সাইন ইন",
+    "signup": "সাইন আপ", 
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "name": "নাম",
+    "welcome_back": "আবার স্বাগতম",
+    "create_account": "আপনার অ্যাকাউন্ট তৈরি করুন"
+  },
+  "common": {
+    "loading": "লোডিং...",
+    "error": "ত্রুটি",
+    "success": "সফল",
+    "cancel": "বাতিল",
+    "save": "সংরক্ষণ",
+    "delete": "মুছুন",
+    "edit": "সম্পাদনা"
+  }
+}
