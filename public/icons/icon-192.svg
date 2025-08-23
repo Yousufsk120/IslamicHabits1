@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+text { font-family: Arial; fill: white; }
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192">
+  <rect width="192" height="192" fill="#15803d" rx="24"/>
+  <text x="96" y="70" text-anchor="middle" font-size="32">🕌</text>
+  <text x="96" y="110" text-anchor="middle" font-size="16">Islamic</text>
+  <text x="96" y="130" text-anchor="middle" font-size="16">Habits</text>
+</svg>
+</body>
+</html>

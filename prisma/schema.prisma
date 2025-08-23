@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  passwordHash      String
+  name              String?
+  country           String?
+  city              String?
+  timezone          String?
+  madhhabAsr        String   @default("Hanafi") // Hanafi or Shafi
+  calcMethod        String   @default("Karachi")
+  highLatitudeRule  String   @default("AngleBased")
+  childModeEnabled  Boolean  @default(false)
+  preferredLanguage String   @default("en")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  childProfiles    ChildProfile[]
+  habits           Habit[]
+  habitLogs        HabitLog[]
+  prayerSettings   PrayerSetting?
+  rewardWallet     RewardWallet?
+  rewardEvents     RewardEvent[]
+  userAchievements UserAchievement[]
+  gameScores       GameScore[]
+
+  @@map("users")
+}
+
+model ChildProfile {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  age       Int?
+  avatarKey String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("child_profiles")
+}
+
+model Habit {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  type      String // prayer, dhikr, custom, etc.
+  schedule  String // JSON string for schedule config
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habitLogs HabitLog[]
+
+  @@map("habits")
+}
+
+model HabitLog {
+  id      String   @id @default(cuid())
+  habitId String
+  userId  String
+  date    DateTime // UTC date
+  status  String // done, skip
+  notes   String?
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@map("habit_logs")
+}
+
+model PrayerSetting {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  method         String  @default("Karachi")
+  asrMadhhab     String  @default("Hanafi")
+  highLatRule    String  @default("AngleBased")
+  latitude       Float?
+  longitude      Float?
+  timezone       String?
+  useApiFallback Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("prayer_settings")
+}
+
+model RewardWallet {
+  id          String @id @default(cuid())
+  userId      String @unique
+  nekiBalance Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reward_wallets")
+}
+
+model RewardEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  source    String // tasbih, habit, game, streak
+  amount    Int
+  meta      String? // JSON string for additional data
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reward_events")
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  key         String @unique
+  title       String
+  description String
+  icon        String
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model GameScore {
+  id        String   @id @default(cuid())
+  userId    String
+  gameKey   String
+  score     Int
+  meta      String? // JSON string for additional data
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("game_scores")
+}
