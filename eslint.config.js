@@ -10,15 +10,15 @@ export default tseslint.config(
   {
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module"
+      sourceType: "module",
     },
     plugins: {
-      "react-refresh": reactRefresh
+      "react-refresh": reactRefresh,
     },
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "off",
-      "react-refresh/only-export-components": "warn"
-    }
-  }
+      "react-refresh/only-export-components": "warn",
+    },
+  },
 );

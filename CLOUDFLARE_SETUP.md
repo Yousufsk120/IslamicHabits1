@@ -45,6 +45,7 @@ For automated deployments, add these secrets to your GitHub repository:
    - `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare account ID
 
 ### Getting Cloudflare API Token:
+
 1. Go to Cloudflare Dashboard → My Profile → API Tokens
 2. Click "Create Token"
 3. Use "Custom token" template
@@ -55,6 +56,7 @@ For automated deployments, add these secrets to your GitHub repository:
 6. Copy the generated token
 
 ### Getting Account ID:
+
 1. Go to Cloudflare Dashboard → right sidebar
 2. Copy the Account ID
 
@@ -68,6 +70,7 @@ For automated deployments, add these secrets to your GitHub repository:
 ## Step 6: DNS Configuration
 
 Cloudflare will automatically configure DNS records for your Pages deployment:
+
 - `A` record pointing to Cloudflare Pages
 - `AAAA` record for IPv6 (if needed)
 - `CNAME` record for www subdomain (optional)
@@ -75,6 +78,7 @@ Cloudflare will automatically configure DNS records for your Pages deployment:
 ## Optional: Advanced Configuration
 
 ### Wrangler CLI (Local Development)
+
 This project includes Wrangler CLI for local Cloudflare development:
 
 ```bash
@@ -92,12 +96,15 @@ npm run cf:deploy
 ```
 
 ### Environment Variables
+
 Set environment variables in Cloudflare Pages settings if your app requires them.
 
 ### Functions
+
 The `functions/` directory is set up for Cloudflare Workers/Pages Functions if you need serverless API endpoints.
 
 ### Preview Deployments
+
 Every pull request will create a preview deployment automatically.
 
 ## Verification
