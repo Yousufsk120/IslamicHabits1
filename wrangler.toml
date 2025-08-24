@@ -1,0 +1,20 @@
+name = "islamic-habits"
+compatibility_date = "2024-08-24"
+
+[env.production]
+vars = { NODE_ENV = "production" }
+
+[build]
+command = "npm run build"
+cwd = "."
+publish = "dist"
+
+# Custom domain configuration
+# Uncomment and update when you have your domain ready
+# [[env.production.routes]]
+# pattern = "your-domain.com/*"
+# custom_domain = true
+
+# [[env.production.routes]]
+# pattern = "www.your-domain.com/*"
+# custom_domain = true

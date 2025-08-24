@@ -3,6 +3,7 @@
 Minimal, production-ready front-end scaffold.
 
 ## Scripts
+
 - `npm run dev` — start dev server
 - `npm run build` — build for production
 - `npm run preview` — serve production build locally
@@ -10,10 +11,13 @@ Minimal, production-ready front-end scaffold.
 - `npm run format` — run Prettier
 
 ## Deploy
+
+- **Cloudflare Pages:** See [CLOUDFLARE_SETUP.md](./CLOUDFLARE_SETUP.md) for complete domain and deployment setup
 - **Vercel:** push to GitHub, import repo on Vercel. `vercel.json` included.
 - **Static hosts:** run `npm run build` and upload `dist/`.
 
 ## Structure
+
 ```
 public/
   favicon.svg
