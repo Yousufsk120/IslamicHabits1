@@ -4,6 +4,9 @@ import tseslint from "typescript-eslint";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default tseslint.config(
+  {
+    ignores: ["dist/", "node_modules/"]
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -18,7 +21,6 @@ export default tseslint.config(
       "no-unused-vars": "warn",
       "no-undef": "off",
       "react-refresh/only-export-components": "warn"
-    },
-    ignores: ["dist/", "node_modules/"]
+    }
   }
 );
