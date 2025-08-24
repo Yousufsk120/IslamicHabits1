@@ -20,5 +20,8 @@ export default tseslint.config(
       "react-refresh/only-export-components": "warn"
     },
     ignores: ["dist/", "node_modules/"]
+  },
+  {
+    ignores: ["dist/**/*", "node_modules/**/*"]
   }
 );
