@@ -1,6 +1,14 @@
 # Islamic Habits — Vite + React + Tailwind
 
-Minimal, production-ready front-end scaffold.
+A beautiful and intuitive Islamic habits tracker to help Muslims build and maintain beneficial habits that bring them closer to Allah.
+
+## Features
+- 🕌 Prayer tracking
+- 📖 Quran reading goals
+- 💰 Charity giving tracker
+- 🤲 Dhikr counter
+- 🌙 Fasting tracker
+- 👥 Community features
 
 ## Scripts
 - `npm run dev` — start dev server
@@ -10,6 +18,11 @@ Minimal, production-ready front-end scaffold.
 - `npm run format` — run Prettier
 
 ## Deploy
+
+### Cloudflare Pages (Recommended for islamic-habits.com)
+See [CLOUDFLARE_DEPLOYMENT.md](./CLOUDFLARE_DEPLOYMENT.md) for complete setup instructions.
+
+### Other Options
 - **Vercel:** push to GitHub, import repo on Vercel. `vercel.json` included.
 - **Static hosts:** run `npm run build` and upload `dist/`.
 
@@ -19,8 +32,9 @@ public/
   favicon.svg
   robots.txt
   sitemap.xml
+  _redirects
 src/
-  lib/utils.ts
+  App.tsx
   main.tsx
   index.css
 index.html
