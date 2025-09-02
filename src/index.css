@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Islamic-themed custom styles */
+:root {
+  --islamic-green: #0d5d2c;
+  --islamic-gold: #d4af37;
+  --islamic-blue: #1e3a5f;
+  --islamic-cream: #f5f5dc;
+}
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-white text-gray-900;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .islamic-gradient {
+    background: linear-gradient(135deg, var(--islamic-green) 0%, var(--islamic-blue) 100%);
+  }
+  
+  .islamic-card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .islamic-button {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors;
+  }
+}
+
+/* Arabic text support */
+.arabic-text {
+  font-family: 'Noto Sans Arabic', 'Arial Unicode MS', sans-serif;
+  direction: rtl;
+  text-align: right;
+}

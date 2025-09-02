@@ -19,6 +19,6 @@ export default tseslint.config(
       "no-undef": "off",
       "react-refresh/only-export-components": "warn"
     },
-    ignores: ["dist/", "node_modules/"]
+    ignores: ["dist/", "node_modules/", "*.d.ts"]
   }
 );
