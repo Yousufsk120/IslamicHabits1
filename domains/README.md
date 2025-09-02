@@ -8,6 +8,7 @@ To set up your custom domain with CNAME records:
    - Vercel will show DNS instructions
 
 2. **Cloudflare DNS Records:**
+
    ```
    Type: CNAME
    Name: @ (for root domain) or www (for subdomain)

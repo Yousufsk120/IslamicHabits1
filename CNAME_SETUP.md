@@ -24,6 +24,7 @@ This guide explains how to connect your Vercel deployment with Cloudflare DNS ma
 ## Step 3: Configure CNAME in Cloudflare
 
 ### For Subdomain (www.yoursite.com):
+
 1. Login to Cloudflare dashboard
 2. Select your domain
 3. Go to DNS > Records
@@ -34,6 +35,7 @@ This guide explains how to connect your Vercel deployment with Cloudflare DNS ma
    - **TTL**: Auto
 
 ### For Root Domain (yoursite.com):
+
 1. Add a CNAME record:
    - **Name**: `@` (represents root domain)
    - **Target**: `cname.vercel-dns.com`
@@ -50,6 +52,7 @@ This guide explains how to connect your Vercel deployment with Cloudflare DNS ma
 ## Step 5: Enable Cloudflare Proxy (Optional)
 
 After verifying the connection works:
+
 1. Return to Cloudflare DNS settings
 2. Click on the orange cloud icon to enable proxy
 3. This enables Cloudflare's CDN, security features, and performance optimizations
@@ -63,6 +66,7 @@ After verifying the connection works:
 3. **Redirect Loops**: Check Cloudflare's "Always Use HTTPS" setting and Vercel's domain configuration
 
 ### Verification Commands:
+
 ```bash
 # Check DNS resolution
 nslookup yoursite.com
@@ -89,6 +93,7 @@ curl -I https://yoursite.com
 ## Configuration Files
 
 This repository includes:
+
 - `vercel.json`: Vercel deployment configuration
 - Proper build settings for Vite + React deployment
 - SPA routing configuration for client-side navigation
