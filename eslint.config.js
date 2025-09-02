@@ -7,6 +7,9 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    ignores: ["dist/", "node_modules/"]
+  },
+  {
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module"
@@ -18,7 +21,6 @@ export default tseslint.config(
       "no-unused-vars": "warn",
       "no-undef": "off",
       "react-refresh/only-export-components": "warn"
-    },
-    ignores: ["dist/", "node_modules/"]
+    }
   }
 );
