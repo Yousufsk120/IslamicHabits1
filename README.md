@@ -13,6 +13,9 @@ Minimal, production-ready front-end scaffold.
 - **Vercel:** push to GitHub, import repo on Vercel. `vercel.json` included.
 - **Static hosts:** run `npm run build` and upload `dist/`.
 
+### Custom Domain with Cloudflare
+For connecting your Vercel deployment with Cloudflare DNS, see [CNAME_SETUP.md](./CNAME_SETUP.md) for detailed instructions on configuring CNAME records.
+
 ## Structure
 ```
 public/
