@@ -54,6 +54,18 @@ export function useStats() {
     }
   }, [user]);
 
+  // Update stats when user data changes
+  useEffect(() => {
+    if (user) {
+      const userStats: Stats = {
+        dhikr: Object.values(user.dhikrCount).reduce((a, b) => a + b, 0),
+        coins: user.rewards,
+        dhikrCount: user.dhikrCount,
+      };
+      setStats(userStats);
+    }
+  }, [user?.rewards, user?.dhikrCount]);
+
   const addDhikr = (dhikrType: keyof Stats["dhikrCount"], coinsToAdd = 1) => {
     const newStats = {
       ...stats,

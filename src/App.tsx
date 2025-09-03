@@ -4,10 +4,10 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LoginForm } from "./components/LoginForm";
 import { GamingMode } from "./components/GamingMode";
 import { UserDashboard } from "./components/UserDashboard";
-import { User, LogIn, Gamepad2, Trophy } from "lucide-react";
+import { User, LogIn, Gamepad2, Trophy, Chrome, Apple } from "lucide-react";
 
 function AppContent() {
-  const { user } = useAuth();
+  const { user, loginWithGoogle, loginWithApple, loading } = useAuth();
   const [view, setView] = useState<"home" | "gaming" | "dashboard" | "login">("home");
 
   const renderView = () => {
@@ -87,6 +87,30 @@ function AppContent() {
                   </button>
                 )}
               </div>
+
+              {!user && (
+                <div className="mb-8">
+                  <p className="text-green-700 font-medium mb-4">Quick Sign In:</p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button
+                      onClick={loginWithGoogle}
+                      disabled={loading}
+                      className="inline-flex items-center justify-center py-3 px-6 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    >
+                      <Chrome className="w-5 h-5 mr-2" />
+                      Continue with Google
+                    </button>
+                    <button
+                      onClick={loginWithApple}
+                      disabled={loading}
+                      className="inline-flex items-center justify-center py-3 px-6 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    >
+                      <Apple className="w-5 h-5 mr-2" />
+                      Continue with Apple
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="bg-white rounded-lg shadow-lg p-8 text-left">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Features</h3>
