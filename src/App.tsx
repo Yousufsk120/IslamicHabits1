@@ -3,6 +3,8 @@ import { AnimatePresence } from "framer-motion";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LoginForm } from "./components/LoginForm";
 import { GamingMode } from "./components/GamingMode";
+import { PrayerTimesCard } from "./components/PrayerTimesCard";
+import { QiblaCompass } from "./components/QiblaCompass";
 import { UserDashboard } from "./components/UserDashboard";
 import { User, LogIn, Gamepad2, Trophy, Chrome, Apple } from "lucide-react";
 
@@ -111,6 +113,11 @@ function AppContent() {
                   </div>
                 </div>
               )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <PrayerTimesCard />
+                <QiblaCompass />
+              </div>
 
               <div className="bg-white rounded-lg shadow-lg p-8 text-left">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Features</h3>
