@@ -45,7 +45,7 @@ export function useStats() {
       if (cached) {
         try {
           setStats(JSON.parse(cached));
-        } catch (e) {
+        } catch {
           setStats(defaultStats);
         }
       } else {

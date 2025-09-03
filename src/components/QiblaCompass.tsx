@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Compass, MapPin, Navigation } from "lucide-react";
+import { MapPin, Navigation } from "lucide-react";
 
 interface QiblaCompassProps {
   lat?: number;
