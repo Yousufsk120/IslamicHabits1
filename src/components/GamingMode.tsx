@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Coins, Star, Heart, Sparkles } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
+import { useStats } from "../hooks/useStats";
 
 interface FloatingReward {
   id: string;
@@ -70,7 +70,7 @@ const DhikrButton: React.FC<DhikrButtonProps> = ({
 };
 
 export const GamingMode: React.FC = () => {
-  const { user, updateRewards, updateDhikrCount } = useAuth();
+  const { stats, addDhikr } = useStats();
   const [floatingRewards, setFloatingRewards] = useState<FloatingReward[]>([]);
   const [showMotivation, setShowMotivation] = useState("");
 
@@ -101,12 +101,11 @@ export const GamingMode: React.FC = () => {
   };
 
   const handleDhikrClick = (dhikrKey: keyof typeof dhikrTypes) => {
-    // Update dhikr count
-    updateDhikrCount(dhikrKey, 1);
-
     // Add rewards (1-3 coins randomly)
     const rewardAmount = Math.floor(Math.random() * 3) + 1;
-    updateRewards(rewardAmount);
+    
+    // Update dhikr count and rewards in one call
+    addDhikr(dhikrKey, rewardAmount);
 
     // Create floating reward
     createFloatingReward(dhikrKey);
@@ -168,7 +167,7 @@ export const GamingMode: React.FC = () => {
               <div className="text-center">
                 <div className="flex items-center justify-center text-2xl font-bold text-yellow-600 mb-1">
                   <Coins className="w-6 h-6 mr-2" />
-                  {user?.rewards || 0}
+                  {stats.coins}
                 </div>
                 <div className="text-sm text-gray-600">Total Rewards</div>
               </div>
@@ -176,7 +175,7 @@ export const GamingMode: React.FC = () => {
               <div className="text-center">
                 <div className="flex items-center justify-center text-2xl font-bold text-purple-600 mb-1">
                   <Heart className="w-6 h-6 mr-2" />
-                  {Object.values(user?.dhikrCount || {}).reduce((a, b) => a + b, 0)}
+                  {stats.dhikr}
                 </div>
                 <div className="text-sm text-gray-600">Total Dhikr</div>
               </div>
@@ -220,21 +219,19 @@ export const GamingMode: React.FC = () => {
         </div>
 
         {/* Individual Dhikr Counts */}
-        {user && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Your Progress</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(dhikrTypes).map(([key, dhikr]) => (
-                <div key={key} className="text-center p-3 bg-white rounded-lg shadow-sm">
-                  <div className="text-lg font-bold text-gray-800">
-                    {user.dhikrCount[key as keyof typeof user.dhikrCount] || 0}
-                  </div>
-                  <div className="text-xs text-gray-600">{dhikr.transliteration}</div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+          <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Your Progress</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Object.entries(dhikrTypes).map(([key, dhikr]) => (
+              <div key={key} className="text-center p-3 bg-white rounded-lg shadow-sm">
+                <div className="text-lg font-bold text-gray-800">
+                  {stats.dhikrCount[key as keyof typeof stats.dhikrCount]}
                 </div>
-              ))}
-            </div>
+                <div className="text-xs text-gray-600">{dhikr.transliteration}</div>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Floating Rewards Animation */}

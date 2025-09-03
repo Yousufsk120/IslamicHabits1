@@ -119,7 +119,9 @@ function AppContent() {
               </div>
 
               <footer className="mt-8 text-green-700">
-                <p className="text-sm">Built with Vite + React + Tailwind + Framer Motion</p>
+                {import.meta.env.DEV && (
+                  <p className="text-sm">Built with Vite + React + Tailwind + Framer Motion</p>
+                )}
               </footer>
             </div>
           </div>
