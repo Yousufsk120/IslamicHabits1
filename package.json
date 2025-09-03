@@ -12,6 +12,7 @@
     "format": "prettier -w ."
   },
   "dependencies": {
+    "adhan": "^4.4.3",
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
