@@ -7,20 +7,20 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ["dist/", "node_modules/"]
+    ignores: ["dist/", "node_modules/"],
   },
   {
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module"
+      sourceType: "module",
     },
     plugins: {
-      "react-refresh": reactRefresh
+      "react-refresh": reactRefresh,
     },
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "off",
-      "react-refresh/only-export-components": "warn"
-    }
-  }
+      "react-refresh/only-export-components": "warn",
+    },
+  },
 );
