@@ -7,9 +7,9 @@ interface QiblaCompassProps {
   lng?: number;
 }
 
-export const QiblaCompass: React.FC<QiblaCompassProps> = ({ 
+export const QiblaCompass: React.FC<QiblaCompassProps> = ({
   lat = 40.7128, // Default to New York
-  lng = -74.0060 
+  lng = -74.006,
 }) => {
   const [qiblaDirection, setQiblaDirection] = useState<number>(0);
   const [location, setLocation] = useState<string>("New York, NY");
@@ -26,7 +26,8 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
       const deltaLng = ((KAABA_LNG - lng) * Math.PI) / 180;
 
       const x = Math.sin(deltaLng) * Math.cos(lat2);
-      const y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLng);
+      const y =
+        Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLng);
 
       let qibla = Math.atan2(x, y);
       qibla = (qibla * 180) / Math.PI;
@@ -39,13 +40,30 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
     setQiblaDirection(direction);
 
     // Set location name (simplified)
-    if (lat !== 40.7128 || lng !== -74.0060) {
+    if (lat !== 40.7128 || lng !== -74.006) {
       setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
     }
   }, [lat, lng]);
 
   const formatDirection = (degrees: number): string => {
-    const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    const directions = [
+      "N",
+      "NNE",
+      "NE",
+      "ENE",
+      "E",
+      "ESE",
+      "SE",
+      "SSE",
+      "S",
+      "SSW",
+      "SW",
+      "WSW",
+      "W",
+      "WNW",
+      "NW",
+      "NNW",
+    ];
     const index = Math.round(degrees / 22.5) % 16;
     return directions[index];
   };
@@ -87,7 +105,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
         {/* Compass */}
         <div className="relative w-48 h-48 mx-auto mb-6">
           <div className="absolute inset-0 rounded-full border-4 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100"></div>
-          
+
           {/* Compass markings */}
           <div className="absolute inset-2 rounded-full">
             {Array.from({ length: 12 }, (_, i) => (
@@ -95,19 +113,27 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
                 key={i}
                 className="absolute w-0.5 h-4 bg-gray-400"
                 style={{
-                  top: '4px',
-                  left: '50%',
-                  transformOrigin: '50% 92px',
+                  top: "4px",
+                  left: "50%",
+                  transformOrigin: "50% 92px",
                   transform: `translateX(-50%) rotate(${i * 30}deg)`,
                 }}
               />
             ))}
-            
+
             {/* Cardinal directions */}
-            <div className="absolute top-1 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-700">N</div>
-            <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-700">S</div>
-            <div className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-700">E</div>
-            <div className="absolute left-1 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-700">W</div>
+            <div className="absolute top-1 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-700">
+              N
+            </div>
+            <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-700">
+              S
+            </div>
+            <div className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-700">
+              E
+            </div>
+            <div className="absolute left-1 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-700">
+              W
+            </div>
           </div>
 
           {/* Qibla arrow */}
@@ -135,12 +161,10 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
               {qiblaDirection.toFixed(1)}° ({formatDirection(qiblaDirection)})
             </span>
           </div>
-          
+
           <div className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2">
             <span className="text-gray-600">Distance to Mecca:</span>
-            <span className="font-bold text-green-700">
-              {getDistanceToMecca().toFixed(0)} km
-            </span>
+            <span className="font-bold text-green-700">{getDistanceToMecca().toFixed(0)} km</span>
           </div>
         </div>
 
