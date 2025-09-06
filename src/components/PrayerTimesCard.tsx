@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { PrayerTimes, CalculationMethod, Coordinates } from "adhan";
-import { motion } from "framer-motion";
-import { Clock, MapPin, Loader } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, MapPin, Loader, Search } from "lucide-react";
+import { useGeolocation } from "../hooks/useGeolocation";
+import { LocationSearch } from "./LocationSearch";
 
 interface PrayerTimesCardProps {
   lat?: number;
@@ -9,14 +11,26 @@ interface PrayerTimesCardProps {
 }
 
 export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({ 
-  lat = 40.7128, // Default to New York
-  lng = -74.0060 
+  lat: propLat, 
+  lng: propLng 
 }) => {
+  const { location: geoLocation, loading: geoLoading, requestLocation } = useGeolocation();
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
-  const [location, setLocation] = useState<string>("New York, NY");
+  const [locationName, setLocationName] = useState<string>("Detecting location...");
   const [loading, setLoading] = useState(true);
+  const [showLocationSearch, setShowLocationSearch] = useState(false);
+
+  // Determine which coordinates to use
+  const lat = propLat ?? geoLocation?.latitude ?? 40.7128; // Default to New York
+  const lng = propLng ?? geoLocation?.longitude ?? -74.0060;
 
   useEffect(() => {
+    if (geoLoading) {
+      setLocationName("Detecting location...");
+      setLoading(true);
+      return;
+    }
+
     try {
       const params = CalculationMethod.MuslimWorldLeague();
       const coordinates = new Coordinates(lat, lng);
@@ -24,15 +38,30 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
       setPrayerTimes(times);
       setLoading(false);
 
-      // Try to get location name from coordinates (simplified)
-      if (lat !== 40.7128 || lng !== -74.0060) {
-        setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
+      // Set location name
+      if (geoLocation?.city && geoLocation?.country) {
+        setLocationName(`${geoLocation.city}, ${geoLocation.country}`);
+      } else if (propLat && propLng) {
+        setLocationName(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
+      } else {
+        setLocationName("New York, NY");
       }
     } catch (error) {
       console.error("Error calculating prayer times:", error);
       setLoading(false);
     }
-  }, [lat, lng]);
+  }, [lat, lng, geoLocation, geoLoading, propLat, propLng]);
+
+  const handleLocationSelect = (newLocation: any) => {
+    // Update location coordinates and trigger prayer times recalculation
+    const newCoordinates = new Coordinates(newLocation.latitude, newLocation.longitude);
+    const newTimes = new PrayerTimes(newCoordinates, new Date(), CalculationMethod.MuslimWorldLeague());
+    setPrayerTimes(newTimes);
+    setLocationName(`${newLocation.city}, ${newLocation.country}`);
+    
+    // Save the new location to localStorage for persistence
+    localStorage.setItem('ih_prayer_location', JSON.stringify(newLocation));
+  };
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { 
@@ -105,7 +134,14 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
           </h3>
           <p className="text-sm text-gray-600 flex items-center mt-1">
             <MapPin className="w-4 h-4 mr-1" />
-            {location}
+            <span>{locationName}</span>
+            <button
+              onClick={() => setShowLocationSearch(true)}
+              className="ml-2 p-1 text-gray-400 hover:text-green-600 transition-colors"
+              title="Change location"
+            >
+              <Search className="w-4 h-4" />
+            </button>
           </p>
         </div>
         {currentPrayer && (
@@ -152,6 +188,16 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
       <div className="mt-4 text-xs text-gray-500 text-center">
         Using Muslim World League calculation method
       </div>
+
+      {/* Location Search Modal */}
+      <AnimatePresence>
+        {showLocationSearch && (
+          <LocationSearch
+            onLocationSelect={handleLocationSelect}
+            onClose={() => setShowLocationSearch(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
