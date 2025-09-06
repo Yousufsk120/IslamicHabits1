@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Navigation, Search } from "lucide-react";
 import { useGeolocation } from "../hooks/useGeolocation";
+import { useLanguage } from "../contexts/LanguageContext";
 import { LocationSearch } from "./LocationSearch";
 
 interface QiblaCompassProps {
@@ -14,6 +15,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
   lng: propLng 
 }) => {
   const { location: geoLocation, loading: geoLoading } = useGeolocation();
+  const { translations, isRTL } = useLanguage();
   const [qiblaDirection, setQiblaDirection] = useState<number>(0);
   const [locationName, setLocationName] = useState<string>("Detecting location...");
   const [showLocationSearch, setShowLocationSearch] = useState(false);
@@ -28,7 +30,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
 
   useEffect(() => {
     if (geoLoading) {
-      setLocationName("Detecting location...");
+      setLocationName(translations.detectingLocation);
       return;
     }
 
@@ -116,18 +118,18 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
       className="bg-white rounded-2xl p-6 shadow-lg"
     >
       <div className="text-center">
-        <div className="flex items-center justify-center mb-4">
-          <Navigation className="w-5 h-5 mr-2 text-green-600" />
-          <h3 className="text-xl font-bold text-gray-800">Qibla Direction</h3>
+        <div className={`flex items-center justify-center mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Navigation className={`w-5 h-5 text-green-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+          <h3 className="text-xl font-bold text-gray-800">{translations.qiblaDirection}</h3>
         </div>
 
-        <div className="text-sm text-gray-600 flex items-center justify-center mb-6">
-          <MapPin className="w-4 h-4 mr-1" />
+        <div className={`text-sm text-gray-600 flex items-center justify-center mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <MapPin className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
           <span>{locationName}</span>
           <button
             onClick={() => setShowLocationSearch(true)}
-            className="ml-2 p-1 text-gray-400 hover:text-green-600 transition-colors"
-            title="Change location"
+            className={`p-1 text-gray-400 hover:text-green-600 transition-colors ${isRTL ? 'mr-2' : 'ml-2'}`}
+            title={translations.changeLocation}
           >
             <Search className="w-4 h-4" />
           </button>
@@ -178,15 +180,15 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
         </div>
 
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2">
-            <span className="text-gray-600">Direction:</span>
+          <div className={`flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <span className="text-gray-600">{translations.direction}</span>
             <span className="font-bold text-green-700">
               {qiblaDirection.toFixed(1)}° ({formatDirection(qiblaDirection)})
             </span>
           </div>
           
-          <div className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2">
-            <span className="text-gray-600">Distance to Mecca:</span>
+          <div className={`flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <span className="text-gray-600">{translations.distanceToMecca}</span>
             <span className="font-bold text-green-700">
               {getDistanceToMecca().toFixed(0)} km
             </span>
@@ -194,7 +196,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
         </div>
 
         <div className="mt-4 text-xs text-gray-500 text-center">
-          🕋 Point your device towards the green arrow for Qibla
+          {translations.qiblaInstructions}
         </div>
 
         {/* Location Search Modal */}

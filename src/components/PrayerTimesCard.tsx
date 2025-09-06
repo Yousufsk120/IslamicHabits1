@@ -3,6 +3,7 @@ import { PrayerTimes, CalculationMethod, Coordinates } from "adhan";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, MapPin, Loader, Search } from "lucide-react";
 import { useGeolocation } from "../hooks/useGeolocation";
+import { useLanguage } from "../contexts/LanguageContext";
 import { LocationSearch } from "./LocationSearch";
 
 interface PrayerTimesCardProps {
@@ -15,6 +16,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
   lng: propLng 
 }) => {
   const { location: geoLocation, loading: geoLoading, requestLocation } = useGeolocation();
+  const { translations, isRTL } = useLanguage();
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
   const [locationName, setLocationName] = useState<string>("Detecting location...");
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
 
   useEffect(() => {
     if (geoLoading) {
-      setLocationName("Detecting location...");
+      setLocationName(translations.detectingLocation);
       setLoading(true);
       return;
     }
@@ -128,25 +130,25 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
     >
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-xl font-bold text-gray-800 flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-green-600" />
-            Prayer Times
+          <h3 className={`text-xl font-bold text-gray-800 flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <Clock className={`w-5 h-5 text-green-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+            {translations.prayerTimes}
           </h3>
-          <p className="text-sm text-gray-600 flex items-center mt-1">
-            <MapPin className="w-4 h-4 mr-1" />
+          <p className={`text-sm text-gray-600 flex items-center mt-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <MapPin className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
             <span>{locationName}</span>
             <button
               onClick={() => setShowLocationSearch(true)}
-              className="ml-2 p-1 text-gray-400 hover:text-green-600 transition-colors"
-              title="Change location"
+              className={`p-1 text-gray-400 hover:text-green-600 transition-colors ${isRTL ? 'mr-2' : 'ml-2'}`}
+              title={translations.changeLocation}
             >
               <Search className="w-4 h-4" />
             </button>
           </p>
         </div>
         {currentPrayer && (
-          <div className="text-right">
-            <div className="text-sm text-gray-600">Next Prayer</div>
+          <div className={`${isRTL ? 'text-left' : 'text-right'}`}>
+            <div className="text-sm text-gray-600">{translations.nextPrayer}</div>
             <div className="font-bold text-green-700">{currentPrayer.name}</div>
             <div className="text-sm text-gray-800">{formatTime(currentPrayer.time)}</div>
           </div>
@@ -155,38 +157,38 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-          <div className="text-sm text-blue-700 font-medium">Fajr</div>
+          <div className="text-sm text-blue-700 font-medium">{translations.fajr}</div>
           <div className="text-lg font-bold text-blue-800">{formatTime(prayerTimes.fajr)}</div>
         </div>
         
         <div className="text-center p-3 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg">
-          <div className="text-sm text-yellow-700 font-medium">Sunrise</div>
+          <div className="text-sm text-yellow-700 font-medium">{translations.sunrise}</div>
           <div className="text-lg font-bold text-yellow-800">{formatTime(prayerTimes.sunrise)}</div>
         </div>
         
         <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-          <div className="text-sm text-green-700 font-medium">Dhuhr</div>
+          <div className="text-sm text-green-700 font-medium">{translations.dhuhr}</div>
           <div className="text-lg font-bold text-green-800">{formatTime(prayerTimes.dhuhr)}</div>
         </div>
         
         <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
-          <div className="text-sm text-orange-700 font-medium">Asr</div>
+          <div className="text-sm text-orange-700 font-medium">{translations.asr}</div>
           <div className="text-lg font-bold text-orange-800">{formatTime(prayerTimes.asr)}</div>
         </div>
         
         <div className="text-center p-3 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
-          <div className="text-sm text-red-700 font-medium">Maghrib</div>
+          <div className="text-sm text-red-700 font-medium">{translations.maghrib}</div>
           <div className="text-lg font-bold text-red-800">{formatTime(prayerTimes.maghrib)}</div>
         </div>
         
         <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-          <div className="text-sm text-purple-700 font-medium">Isha</div>
+          <div className="text-sm text-purple-700 font-medium">{translations.isha}</div>
           <div className="text-lg font-bold text-purple-800">{formatTime(prayerTimes.isha)}</div>
         </div>
       </div>
 
       <div className="mt-4 text-xs text-gray-500 text-center">
-        Using Muslim World League calculation method
+        {translations.calculationMethod}
       </div>
 
       {/* Location Search Modal */}
