@@ -103,7 +103,7 @@ export const GamingMode: React.FC = () => {
   const handleDhikrClick = (dhikrKey: keyof typeof dhikrTypes) => {
     // Add rewards (1-3 coins randomly)
     const rewardAmount = Math.floor(Math.random() * 3) + 1;
-    
+
     // Update dhikr count and rewards in one call
     addDhikr(dhikrKey, rewardAmount);
 
