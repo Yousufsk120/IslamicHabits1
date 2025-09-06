@@ -6,16 +6,21 @@ import { GamingMode } from "./components/GamingMode";
 import { PrayerTimesCard } from "./components/PrayerTimesCard";
 import { QiblaCompass } from "./components/QiblaCompass";
 import { UserDashboard } from "./components/UserDashboard";
-import { User, LogIn, Gamepad2, Trophy, Chrome, Apple } from "lucide-react";
+import IslamicHabits from "./components/IslamicHabits";
+import { User, LogIn, Gamepad2, Trophy, Chrome, Apple, Heart } from "lucide-react";
 
 function AppContent() {
   const { user, loginWithGoogle, loginWithApple, loading } = useAuth();
-  const [view, setView] = useState<"home" | "gaming" | "dashboard" | "login">("home");
+  const [view, setView] = useState<"home" | "gaming" | "dashboard" | "login" | "comprehensive">(
+    "home",
+  );
 
   const renderView = () => {
     switch (view) {
       case "gaming":
         return <GamingMode />;
+      case "comprehensive":
+        return <IslamicHabits />;
       case "dashboard":
         return (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -55,7 +60,7 @@ function AppContent() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <button
                   onClick={() => setView("gaming")}
                   className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-6 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
@@ -64,6 +69,17 @@ function AppContent() {
                   Gaming Mode
                   <p className="text-sm font-normal opacity-90 mt-1">
                     Interactive dhikr with rewards
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => setView("comprehensive")}
+                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-6 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Heart className="w-8 h-8 mb-2 mx-auto" />
+                  Love & Compassion
+                  <p className="text-sm font-normal opacity-90 mt-1">
+                    Complete Islamic habits page
                   </p>
                 </button>
 
@@ -162,7 +178,7 @@ function AppContent() {
 
   return (
     <>
-      {view !== "home" && view !== "gaming" && (
+      {view !== "home" && view !== "gaming" && view !== "comprehensive" && (
         <button
           onClick={() => setView("home")}
           className="fixed top-4 left-4 z-40 bg-white/80 backdrop-blur-sm text-gray-700 hover:text-gray-900 p-2 rounded-full shadow-lg transition-colors"
@@ -172,7 +188,7 @@ function AppContent() {
         </button>
       )}
 
-      {view === "gaming" && (
+      {(view === "gaming" || view === "comprehensive") && (
         <button
           onClick={() => setView("home")}
           className="fixed top-4 left-4 z-40 bg-white/80 backdrop-blur-sm text-purple-700 hover:text-purple-900 p-3 rounded-full shadow-lg transition-colors"
