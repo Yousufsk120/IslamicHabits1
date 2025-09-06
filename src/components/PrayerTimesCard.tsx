@@ -8,9 +8,9 @@ interface PrayerTimesCardProps {
   lng?: number;
 }
 
-export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({ 
+export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
   lat = 40.7128, // Default to New York
-  lng = -74.0060 
+  lng = -74.006,
 }) => {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
   const [location, setLocation] = useState<string>("New York, NY");
@@ -25,7 +25,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
       setLoading(false);
 
       // Try to get location name from coordinates (simplified)
-      if (lat !== 40.7128 || lng !== -74.0060) {
+      if (lat !== 40.7128 || lng !== -74.006) {
         setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
       }
     } catch (error) {
@@ -35,16 +35,16 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
   }, [lat, lng]);
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
   };
 
   const getCurrentPrayer = () => {
     if (!prayerTimes) return null;
-    
+
     const now = new Date();
     if (now < prayerTimes.fajr) return { name: "Fajr", time: prayerTimes.fajr };
     if (now < prayerTimes.sunrise) return { name: "Sunrise", time: prayerTimes.sunrise };
@@ -52,11 +52,15 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
     if (now < prayerTimes.asr) return { name: "Asr", time: prayerTimes.asr };
     if (now < prayerTimes.maghrib) return { name: "Maghrib", time: prayerTimes.maghrib };
     if (now < prayerTimes.isha) return { name: "Isha", time: prayerTimes.isha };
-    
+
     // After Isha, next is Fajr tomorrow
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowTimes = new PrayerTimes(new Coordinates(lat, lng), tomorrow, CalculationMethod.MuslimWorldLeague());
+    const tomorrowTimes = new PrayerTimes(
+      new Coordinates(lat, lng),
+      tomorrow,
+      CalculationMethod.MuslimWorldLeague(),
+    );
     return { name: "Fajr", time: tomorrowTimes.fajr };
   };
 
@@ -122,27 +126,27 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
           <div className="text-sm text-blue-700 font-medium">Fajr</div>
           <div className="text-lg font-bold text-blue-800">{formatTime(prayerTimes.fajr)}</div>
         </div>
-        
+
         <div className="text-center p-3 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg">
           <div className="text-sm text-yellow-700 font-medium">Sunrise</div>
           <div className="text-lg font-bold text-yellow-800">{formatTime(prayerTimes.sunrise)}</div>
         </div>
-        
+
         <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
           <div className="text-sm text-green-700 font-medium">Dhuhr</div>
           <div className="text-lg font-bold text-green-800">{formatTime(prayerTimes.dhuhr)}</div>
         </div>
-        
+
         <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
           <div className="text-sm text-orange-700 font-medium">Asr</div>
           <div className="text-lg font-bold text-orange-800">{formatTime(prayerTimes.asr)}</div>
         </div>
-        
+
         <div className="text-center p-3 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
           <div className="text-sm text-red-700 font-medium">Maghrib</div>
           <div className="text-lg font-bold text-red-800">{formatTime(prayerTimes.maghrib)}</div>
         </div>
-        
+
         <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
           <div className="text-sm text-purple-700 font-medium">Isha</div>
           <div className="text-lg font-bold text-purple-800">{formatTime(prayerTimes.isha)}</div>
