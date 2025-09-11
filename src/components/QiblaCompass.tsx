@@ -5,14 +5,16 @@ import { MapPin, Navigation } from "lucide-react";
 interface QiblaCompassProps {
   lat?: number;
   lng?: number;
+  locationName?: string;
 }
 
 export const QiblaCompass: React.FC<QiblaCompassProps> = ({
   lat = 40.7128, // Default to New York
   lng = -74.006,
+  locationName = "New York, NY",
 }) => {
   const [qiblaDirection, setQiblaDirection] = useState<number>(0);
-  const [location, setLocation] = useState<string>("New York, NY");
+  const [location, setLocation] = useState<string>(locationName);
 
   // Kaaba coordinates
   const KAABA_LAT = 21.4225;
@@ -39,11 +41,9 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({
     const direction = calculateQiblaDirection(lat, lng);
     setQiblaDirection(direction);
 
-    // Set location name (simplified)
-    if (lat !== 40.7128 || lng !== -74.006) {
-      setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
-    }
-  }, [lat, lng]);
+    // Use provided location name or fallback to coordinates
+    setLocation(locationName || `${lat.toFixed(2)}, ${lng.toFixed(2)}`);
+  }, [lat, lng, locationName]);
 
   const formatDirection = (degrees: number): string => {
     const directions = [

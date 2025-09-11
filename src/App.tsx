@@ -7,12 +7,24 @@ import { GamingMode } from "./components/GamingMode";
 import { PrayerTimesCard } from "./components/PrayerTimesCard";
 import { QiblaCompass } from "./components/QiblaCompass";
 import { UserDashboard } from "./components/UserDashboard";
+import { LocationSelector } from "./components/LocationSelector";
+import {
+  CalculationMethodSelector,
+  CalculationMethodType,
+} from "./components/CalculationMethodSelector";
 import { User, LogIn, Gamepad2, Trophy, Chrome, Apple, Globe } from "lucide-react";
 
 function AppContent() {
   const { user, loginWithGoogle, loginWithApple, loading } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [view, setView] = useState<"home" | "gaming" | "dashboard" | "login">("home");
+
+  // Location and calculation method state
+  const [currentLat, setCurrentLat] = useState(40.7128); // Default to New York
+  const [currentLng, setCurrentLng] = useState(-74.006);
+  const [currentLocation, setCurrentLocation] = useState("New York, NY");
+  const [calculationMethod, setCalculationMethod] =
+    useState<CalculationMethodType>("MuslimWorldLeague");
 
   // Hash-based routing implementation
   useEffect(() => {
@@ -28,10 +40,10 @@ function AppContent() {
 
     // Set initial view based on hash
     handleHashChange();
-    
+
     // Listen for hash changes
     window.addEventListener("hashchange", handleHashChange);
-    
+
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -41,12 +53,27 @@ function AppContent() {
     window.location.hash = `#${newView}`;
   };
 
-  const availableLanguages = useMemo(() => [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "bn", name: "বাংলা", flag: "🇧🇩" },
-    { code: "ur", name: "اردو", flag: "🇵🇰" },
-    { code: "hi", name: "हिन्दी", flag: "🇮🇳" }
-  ], []);
+  // Handle location change
+  const handleLocationChange = (lat: number, lng: number, locationName?: string) => {
+    setCurrentLat(lat);
+    setCurrentLng(lng);
+    setCurrentLocation(locationName || `${lat.toFixed(2)}, ${lng.toFixed(2)}`);
+  };
+
+  // Handle calculation method change
+  const handleMethodChange = (method: CalculationMethodType) => {
+    setCalculationMethod(method);
+  };
+
+  const availableLanguages = useMemo(
+    () => [
+      { code: "en", name: "English", flag: "🇺🇸" },
+      { code: "bn", name: "বাংলা", flag: "🇧🇩" },
+      { code: "ur", name: "اردو", flag: "🇵🇰" },
+      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+    ],
+    [],
+  );
 
   const renderView = () => {
     switch (view) {
@@ -92,9 +119,7 @@ function AppContent() {
               </div>
 
               <h1 className="text-5xl font-bold text-green-800 mb-4">{t("appTitle")}</h1>
-              <p className="text-xl text-green-700 mb-12">
-                {t("appSubtitle")}
-              </p>
+              <p className="text-xl text-green-700 mb-12">{t("appSubtitle")}</p>
 
               {user && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8">
@@ -121,9 +146,7 @@ function AppContent() {
                 >
                   <Gamepad2 className="w-8 h-8 mb-2 mx-auto" />
                   {t("gamingMode")}
-                  <p className="text-sm font-normal opacity-90 mt-1">
-                    {t("gamingModeDesc")}
-                  </p>
+                  <p className="text-sm font-normal opacity-90 mt-1">{t("gamingModeDesc")}</p>
                 </button>
 
                 {user ? (
@@ -133,9 +156,7 @@ function AppContent() {
                   >
                     <User className="w-8 h-8 mb-2 mx-auto" />
                     {t("dashboard")}
-                    <p className="text-sm font-normal opacity-90 mt-1">
-                      {t("dashboardDesc")}
-                    </p>
+                    <p className="text-sm font-normal opacity-90 mt-1">{t("dashboardDesc")}</p>
                   </button>
                 ) : (
                   <button
@@ -174,12 +195,47 @@ function AppContent() {
               )}
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <PrayerTimesCard />
-                <QiblaCompass />
+                <PrayerTimesCard
+                  lat={currentLat}
+                  lng={currentLng}
+                  calculationMethod={calculationMethod}
+                  locationName={currentLocation}
+                />
+                <QiblaCompass lat={currentLat} lng={currentLng} locationName={currentLocation} />
+              </div>
+
+              {/* Location and Method Selectors */}
+              <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+                  Location & Calculation Settings
+                </h3>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm text-gray-600 mb-2">Location</label>
+                    <LocationSelector
+                      onLocationChange={handleLocationChange}
+                      currentLat={currentLat}
+                      currentLng={currentLng}
+                      currentLocation={currentLocation}
+                    />
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm text-gray-600 mb-2">Calculation Method</label>
+                    <CalculationMethodSelector
+                      selectedMethod={calculationMethod}
+                      onMethodChange={handleMethodChange}
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  Select your location and preferred calculation method for accurate prayer times
+                </p>
               </div>
 
               <div className="bg-white rounded-lg shadow-lg p-8 text-left">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">{t("features")}</h3>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                  {t("features")}
+                </h3>
                 <div className="space-y-3 text-gray-600">
                   <div className="flex items-center">
                     <span className="text-2xl mr-3">🎮</span>
