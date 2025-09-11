@@ -2,37 +2,69 @@ import React, { useEffect, useState } from "react";
 import { PrayerTimes, CalculationMethod, Coordinates } from "adhan";
 import { motion } from "framer-motion";
 import { Clock, MapPin, Loader } from "lucide-react";
+import { CalculationMethodType } from "./CalculationMethodSelector";
 
 interface PrayerTimesCardProps {
   lat?: number;
   lng?: number;
+  calculationMethod?: CalculationMethodType;
+  locationName?: string;
 }
 
 export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
   lat = 40.7128, // Default to New York
   lng = -74.006,
+  calculationMethod = "MuslimWorldLeague",
+  locationName = "New York, NY",
 }) => {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
-  const [location, setLocation] = useState<string>("New York, NY");
+  const [location, setLocation] = useState<string>(locationName);
   const [loading, setLoading] = useState(true);
+
+  // Get calculation method function
+  const getCalculationMethod = (method: CalculationMethodType) => {
+    switch (method) {
+      case "Egyptian":
+        return CalculationMethod.Egyptian();
+      case "Karachi":
+        return CalculationMethod.Karachi();
+      case "UmmAlQura":
+        return CalculationMethod.UmmAlQura();
+      case "Dubai":
+        return CalculationMethod.Dubai();
+      case "MoonsightingCommittee":
+        return CalculationMethod.MoonsightingCommittee();
+      case "NorthAmerica":
+        return CalculationMethod.NorthAmerica();
+      case "Kuwait":
+        return CalculationMethod.Kuwait();
+      case "Qatar":
+        return CalculationMethod.Qatar();
+      case "Singapore":
+        return CalculationMethod.Singapore();
+      case "Tehran":
+        return CalculationMethod.Tehran();
+      case "MuslimWorldLeague":
+      default:
+        return CalculationMethod.MuslimWorldLeague();
+    }
+  };
 
   useEffect(() => {
     try {
-      const params = CalculationMethod.MuslimWorldLeague();
+      const params = getCalculationMethod(calculationMethod);
       const coordinates = new Coordinates(lat, lng);
       const times = new PrayerTimes(coordinates, new Date(), params);
       setPrayerTimes(times);
       setLoading(false);
 
-      // Try to get location name from coordinates (simplified)
-      if (lat !== 40.7128 || lng !== -74.006) {
-        setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
-      }
+      // Use provided location name or fallback to coordinates
+      setLocation(locationName || `${lat.toFixed(2)}, ${lng.toFixed(2)}`);
     } catch (error) {
       console.error("Error calculating prayer times:", error);
       setLoading(false);
     }
-  }, [lat, lng]);
+  }, [lat, lng, calculationMethod, locationName]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {
@@ -59,7 +91,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
     const tomorrowTimes = new PrayerTimes(
       new Coordinates(lat, lng),
       tomorrow,
-      CalculationMethod.MuslimWorldLeague(),
+      getCalculationMethod(calculationMethod),
     );
     return { name: "Fajr", time: tomorrowTimes.fajr };
   };
@@ -154,7 +186,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
       </div>
 
       <div className="mt-4 text-xs text-gray-500 text-center">
-        Using Muslim World League calculation method
+        Using {calculationMethod.replace(/([A-Z])/g, " $1").trim()} calculation method
       </div>
     </motion.div>
   );
