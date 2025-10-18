@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { PrayerTimes, CalculationMethod, Coordinates } from "adhan";
 import { motion } from "framer-motion";
 import { Clock, MapPin, Loader } from "lucide-react";
@@ -9,30 +9,101 @@ interface PrayerTimesCardProps {
 }
 
 export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
-  lat = 40.7128, // Default to New York
-  lng = -74.006,
+  lat,
+  lng,
 }) => {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
-  const [location, setLocation] = useState<string>("New York, NY");
+  const [location, setLocation] = useState<string>("Current Location");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const coordsRef = useRef<{ lat: number; lng: number } | null>(
+    lat && lng ? { lat, lng } : null,
+  );
+  const intervalRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  const calculateTimes = (latNum: number, lngNum: number) => {
     try {
       const params = CalculationMethod.MuslimWorldLeague();
-      const coordinates = new Coordinates(lat, lng);
+      const coordinates = new Coordinates(latNum, lngNum);
       const times = new PrayerTimes(coordinates, new Date(), params);
       setPrayerTimes(times);
       setLoading(false);
-
-      // Try to get location name from coordinates (simplified)
-      if (lat !== 40.7128 || lng !== -74.006) {
-        setLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
-      }
-    } catch (error) {
-      console.error("Error calculating prayer times:", error);
+      setError(null);
+    } catch (err) {
+      console.error("Error calculating prayer times:", err);
+      setError("Unable to calculate prayer times.");
       setLoading(false);
     }
-  }, [lat, lng]);
+  };
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latNum = position.coords.latitude;
+          const lngNum = position.coords.longitude;
+          coordsRef.current = { lat: latNum, lng: lngNum };
+          setLocation("Current Location");
+          calculateTimes(latNum, lngNum);
+
+          if (intervalRef.current) {
+            window.clearInterval(intervalRef.current);
+          }
+          intervalRef.current = window.setInterval(() => {
+            calculateTimes(latNum, lngNum);
+          }, 60 * 1000);
+        },
+        (geoErr) => {
+          console.warn("Geolocation error, falling back:", geoErr);
+          if (lat !== undefined && lng !== undefined) {
+            coordsRef.current = { lat, lng };
+            setLocation("Selected Location");
+            calculateTimes(lat, lng);
+          } else {
+            const defaultLat = 40.7128;
+            const defaultLng = -74.006;
+            coordsRef.current = { lat: defaultLat, lng: defaultLng };
+            setLocation("New York, NY");
+            calculateTimes(defaultLat, defaultLng);
+          }
+
+          if (intervalRef.current) {
+            window.clearInterval(intervalRef.current);
+          }
+          intervalRef.current = window.setInterval(() => {
+            const c = coordsRef.current;
+            if (c) calculateTimes(c.lat, c.lng);
+          }, 60 * 1000);
+        },
+        { maximumAge: 60 * 1000, timeout: 10 * 1000 },
+      );
+    } else {
+      if (lat !== undefined && lng !== undefined) {
+        coordsRef.current = { lat, lng };
+        setLocation("Selected Location");
+        calculateTimes(lat, lng);
+      } else {
+        const defaultLat = 40.7128;
+        const defaultLng = -74.006;
+        coordsRef.current = { lat: defaultLat, lng: defaultLng };
+        setLocation("New York, NY");
+        calculateTimes(defaultLat, defaultLng);
+      }
+
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+      intervalRef.current = window.setInterval(() => {
+        const c = coordsRef.current;
+        if (c) calculateTimes(c.lat, c.lng);
+      }, 60 * 1000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        window.clearInterval(intervalRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {
@@ -53,15 +124,15 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
     if (now < prayerTimes.maghrib) return { name: "Maghrib", time: prayerTimes.maghrib };
     if (now < prayerTimes.isha) return { name: "Isha", time: prayerTimes.isha };
 
-    // After Isha, next is Fajr tomorrow
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowTimes = new PrayerTimes(
-      new Coordinates(lat, lng),
-      tomorrow,
-      CalculationMethod.MuslimWorldLeague(),
-    );
-    return { name: "Fajr", time: tomorrowTimes.fajr };
+    try {
+      const c = coordsRef.current ?? { lat: 40.7128, lng: -74.006 };
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowTimes = new PrayerTimes(new Coordinates(c.lat, c.lng), tomorrow, CalculationMethod.MuslimWorldLeague());
+      return { name: "Fajr", time: tomorrowTimes.fajr };
+    } catch (err) {
+      return null;
+    }
   };
 
   const currentPrayer = getCurrentPrayer();
@@ -81,7 +152,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
     );
   }
 
-  if (!prayerTimes) {
+  if (!prayerTimes || error) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -89,7 +160,7 @@ export const PrayerTimesCard: React.FC<PrayerTimesCardProps> = ({
         className="bg-white rounded-2xl p-6 shadow-lg"
       >
         <div className="text-center text-gray-600">
-          Unable to load prayer times. Please check your location.
+          {error ?? "Unable to load prayer times. Please check your location."}
         </div>
       </motion.div>
     );
