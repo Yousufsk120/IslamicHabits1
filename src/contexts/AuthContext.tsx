@@ -13,6 +13,8 @@ export interface User {
     laIlahaIllallah: number;
     allahuAkbar: number;
   };
+  streakDays: number;
+  lastActiveDate: string;
 }
 
 interface AuthContextType {
@@ -74,6 +76,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           laIlahaIllallah: 0,
           allahuAkbar: 0,
         },
+        streakDays: 0,
+        lastActiveDate: new Date().toISOString().split("T")[0],
       };
       setUser(mockUser);
       saveUserToStorage(mockUser);
@@ -99,6 +103,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           laIlahaIllallah: 0,
           allahuAkbar: 0,
         },
+        streakDays: 0,
+        lastActiveDate: new Date().toISOString().split("T")[0],
       };
       setUser(mockUser);
       saveUserToStorage(mockUser);
@@ -123,6 +129,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           laIlahaIllallah: 0,
           allahuAkbar: 0,
         },
+        streakDays: 0,
+        lastActiveDate: new Date().toISOString().split("T")[0],
       };
       setUser(mockUser);
       saveUserToStorage(mockUser);
@@ -147,6 +155,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           laIlahaIllallah: 0,
           allahuAkbar: 0,
         },
+        streakDays: 0,
+        lastActiveDate: new Date().toISOString().split("T")[0],
       };
       setUser(mockUser);
       saveUserToStorage(mockUser);

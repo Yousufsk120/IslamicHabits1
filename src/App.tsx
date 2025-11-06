@@ -2,11 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LanguageProvider, useLanguage, Language } from "./contexts/LanguageContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { LoginForm } from "./components/LoginForm";
 import { GamingMode } from "./components/GamingMode";
 import { PrayerTimesCard } from "./components/PrayerTimesCard";
 import { QiblaCompass } from "./components/QiblaCompass";
 import { UserDashboard } from "./components/UserDashboard";
+import { IslamicCalendar } from "./components/IslamicCalendar";
+import { DailyGoals } from "./components/DailyGoals";
+import { IslamicKnowledge } from "./components/IslamicKnowledge";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { User, LogIn, Gamepad2, Trophy, Chrome, Apple, Globe } from "lucide-react";
 
 function AppContent() {
@@ -28,10 +33,10 @@ function AppContent() {
 
     // Set initial view based on hash
     handleHashChange();
-    
+
     // Listen for hash changes
     window.addEventListener("hashchange", handleHashChange);
-    
+
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -41,12 +46,15 @@ function AppContent() {
     window.location.hash = `#${newView}`;
   };
 
-  const availableLanguages = useMemo(() => [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "bn", name: "বাংলা", flag: "🇧🇩" },
-    { code: "ur", name: "اردو", flag: "🇵🇰" },
-    { code: "hi", name: "हिन्दी", flag: "🇮🇳" }
-  ], []);
+  const availableLanguages = useMemo(
+    () => [
+      { code: "en", name: "English", flag: "🇺🇸" },
+      { code: "bn", name: "বাংলা", flag: "🇧🇩" },
+      { code: "ur", name: "اردو", flag: "🇵🇰" },
+      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+    ],
+    [],
+  );
 
   const renderView = () => {
     switch (view) {
@@ -66,13 +74,16 @@ function AppContent() {
         );
       default:
         return (
-          <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+          <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center transition-colors duration-300">
             <div className="max-w-2xl mx-auto text-center p-8">
-              {/* Language Selector */}
+              {/* Header with Language Selector and Theme Toggle */}
               <div className="mb-6">
-                <div className="flex justify-center items-center space-x-2 mb-4">
-                  <Globe className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-gray-600">Language:</span>
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Globe className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">Language:</span>
+                  </div>
+                  <ThemeToggle />
                 </div>
                 <div className="flex justify-center space-x-2">
                   {availableLanguages.map((lang) => (
@@ -82,7 +93,7 @@ function AppContent() {
                       className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                         language === lang.code
                           ? "bg-green-600 text-white"
-                          : "bg-white text-gray-700 hover:bg-green-50"
+                          : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-600"
                       }`}
                     >
                       {lang.flag} {lang.name}
@@ -91,17 +102,17 @@ function AppContent() {
                 </div>
               </div>
 
-              <h1 className="text-5xl font-bold text-green-800 mb-4">{t("appTitle")}</h1>
-              <p className="text-xl text-green-700 mb-12">
-                {t("appSubtitle")}
-              </p>
+              <h1 className="text-5xl font-bold text-green-800 dark:text-green-400 mb-4">
+                {t("appTitle")}
+              </h1>
+              <p className="text-xl text-green-700 dark:text-green-300 mb-12">{t("appSubtitle")}</p>
 
               {user && (
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8">
-                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8">
+                  <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
                     {t("welcomeBack")}, {user.name}! 🌟
                   </h2>
-                  <div className="flex justify-center space-x-6 text-sm text-gray-600">
+                  <div className="flex justify-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center">
                       <Trophy className="w-4 h-4 mr-1" />
                       {user.rewards} {t("rewards")}
@@ -121,9 +132,7 @@ function AppContent() {
                 >
                   <Gamepad2 className="w-8 h-8 mb-2 mx-auto" />
                   {t("gamingMode")}
-                  <p className="text-sm font-normal opacity-90 mt-1">
-                    {t("gamingModeDesc")}
-                  </p>
+                  <p className="text-sm font-normal opacity-90 mt-1">{t("gamingModeDesc")}</p>
                 </button>
 
                 {user ? (
@@ -133,9 +142,7 @@ function AppContent() {
                   >
                     <User className="w-8 h-8 mb-2 mx-auto" />
                     {t("dashboard")}
-                    <p className="text-sm font-normal opacity-90 mt-1">
-                      {t("dashboardDesc")}
-                    </p>
+                    <p className="text-sm font-normal opacity-90 mt-1">{t("dashboardDesc")}</p>
                   </button>
                 ) : (
                   <button
@@ -178,8 +185,20 @@ function AppContent() {
                 <QiblaCompass />
               </div>
 
+              {/* New Islamic Features Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <IslamicCalendar />
+                <DailyGoals
+                  totalDhikr={user ? Object.values(user.dhikrCount).reduce((a, b) => a + b, 0) : 0}
+                  streakDays={user?.streakDays || 0}
+                />
+                <IslamicKnowledge />
+              </div>
+
               <div className="bg-white rounded-lg shadow-lg p-8 text-left">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">{t("features")}</h3>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                  {t("features")}
+                </h3>
                 <div className="space-y-3 text-gray-600">
                   <div className="flex items-center">
                     <span className="text-2xl mr-3">🎮</span>
@@ -248,11 +267,13 @@ function AppContent() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 
