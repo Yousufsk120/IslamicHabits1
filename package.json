@@ -12,6 +12,7 @@
     "format": "prettier -w ."
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.3.1",
     "adhan": "^4.4.3",
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
