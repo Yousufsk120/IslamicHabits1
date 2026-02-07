@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LanguageProvider, useLanguage, Language } from "./contexts/LanguageContext";
 import { LoginForm } from "./components/LoginForm";
@@ -251,6 +252,7 @@ function App() {
     <LanguageProvider>
       <AuthProvider>
         <AppContent />
+        <SpeedInsights />
       </AuthProvider>
     </LanguageProvider>
   );
