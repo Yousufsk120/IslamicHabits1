@@ -55,7 +55,7 @@ const translations = {
     laIlahaIllallah: "La ilaha illallah",
     allahuAkbar: "Allahu Akbar",
     prayerTimes: "Prayer Times",
-    qiblaDirection: "Qibla Direction"
+    qiblaDirection: "Qibla Direction",
   },
   bn: {
     appTitle: "ইসলামিক অভ্যাস",
@@ -88,7 +88,7 @@ const translations = {
     laIlahaIllallah: "লা ইলাহা ইল্লাল্লাহ",
     allahuAkbar: "আল্লাহু আকবার",
     prayerTimes: "নামাজের সময়",
-    qiblaDirection: "কিবলার দিক"
+    qiblaDirection: "কিবলার দিক",
   },
   ur: {
     appTitle: "اسلامی عادات",
@@ -121,7 +121,7 @@ const translations = {
     laIlahaIllallah: "لا الہ الا اللہ",
     allahuAkbar: "اللہ اکبر",
     prayerTimes: "نماز کے اوقات",
-    qiblaDirection: "قبلہ کی سمت"
+    qiblaDirection: "قبلہ کی سمت",
   },
   hi: {
     appTitle: "इस्लामी आदतें",
@@ -154,8 +154,8 @@ const translations = {
     laIlahaIllallah: "ला इलाहा इल्लल्लाह",
     allahuAkbar: "अल्लाहु अकबर",
     prayerTimes: "नमाज़ के समय",
-    qiblaDirection: "किब्ला दिशा"
-  }
+    qiblaDirection: "किब्ला दिशा",
+  },
 };
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
@@ -181,7 +181,10 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   const t = (translationKey: string): string => {
-    return translations[language][translationKey as keyof typeof translations[typeof language]] || translationKey;
+    return (
+      translations[language][translationKey as keyof (typeof translations)[typeof language]] ||
+      translationKey
+    );
   };
 
   return (

@@ -8,19 +8,51 @@ import { GamingMode } from "./components/GamingMode";
 import { PrayerTimesCard } from "./components/PrayerTimesCard";
 import { QiblaCompass } from "./components/QiblaCompass";
 import { UserDashboard } from "./components/UserDashboard";
-import { User, LogIn, Gamepad2, Trophy, Chrome, Apple, Globe } from "lucide-react";
+import { HabitTracker } from "./components/HabitTracker";
+import { ZakatCalculator } from "./components/ZakatCalculator";
+import { IslamicCalendar } from "./components/IslamicCalendar";
+import { Badges } from "./components/Badges";
+import {
+  User,
+  LogIn,
+  Gamepad2,
+  Trophy,
+  Chrome,
+  Apple,
+  Globe,
+  Target,
+  Calculator,
+  Calendar,
+  Award,
+} from "lucide-react";
 
 function AppContent() {
   const { user, loginWithGoogle, loginWithApple, loading } = useAuth();
   const { language, setLanguage, t } = useLanguage();
-  const [view, setView] = useState<"home" | "gaming" | "dashboard" | "login">("home");
+  const [view, setView] = useState<
+    "home" | "gaming" | "dashboard" | "login" | "habits" | "zakat" | "calendar" | "badges"
+  >("home");
 
   // Hash-based routing implementation
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1) || "home";
-      if (["home", "gaming", "dashboard", "login"].includes(hash)) {
-        setView(hash as "home" | "gaming" | "dashboard" | "login");
+      if (
+        ["home", "gaming", "dashboard", "login", "habits", "zakat", "calendar", "badges"].includes(
+          hash,
+        )
+      ) {
+        setView(
+          hash as
+            | "home"
+            | "gaming"
+            | "dashboard"
+            | "login"
+            | "habits"
+            | "zakat"
+            | "calendar"
+            | "badges",
+        );
       } else {
         setView("home");
         window.location.hash = "#home";
@@ -29,10 +61,10 @@ function AppContent() {
 
     // Set initial view based on hash
     handleHashChange();
-    
+
     // Listen for hash changes
     window.addEventListener("hashchange", handleHashChange);
-    
+
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -42,12 +74,15 @@ function AppContent() {
     window.location.hash = `#${newView}`;
   };
 
-  const availableLanguages = useMemo(() => [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "bn", name: "বাংলা", flag: "🇧🇩" },
-    { code: "ur", name: "اردو", flag: "🇵🇰" },
-    { code: "hi", name: "हिन्दी", flag: "🇮🇳" }
-  ], []);
+  const availableLanguages = useMemo(
+    () => [
+      { code: "en", name: "English", flag: "🇺🇸" },
+      { code: "bn", name: "বাংলা", flag: "🇧🇩" },
+      { code: "ur", name: "اردو", flag: "🇵🇰" },
+      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+    ],
+    [],
+  );
 
   const renderView = () => {
     switch (view) {
@@ -65,6 +100,14 @@ function AppContent() {
             <LoginForm onClose={() => navigateTo("home")} />
           </div>
         );
+      case "habits":
+        return <HabitTracker onClose={() => navigateTo("home")} />;
+      case "zakat":
+        return <ZakatCalculator onClose={() => navigateTo("home")} />;
+      case "calendar":
+        return <IslamicCalendar onClose={() => navigateTo("home")} />;
+      case "badges":
+        return <Badges onClose={() => navigateTo("home")} />;
       default:
         return (
           <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
@@ -93,9 +136,7 @@ function AppContent() {
               </div>
 
               <h1 className="text-5xl font-bold text-green-800 mb-4">{t("appTitle")}</h1>
-              <p className="text-xl text-green-700 mb-12">
-                {t("appSubtitle")}
-              </p>
+              <p className="text-xl text-green-700 mb-12">{t("appSubtitle")}</p>
 
               {user && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8">
@@ -122,8 +163,17 @@ function AppContent() {
                 >
                   <Gamepad2 className="w-8 h-8 mb-2 mx-auto" />
                   {t("gamingMode")}
+                  <p className="text-sm font-normal opacity-90 mt-1">{t("gamingModeDesc")}</p>
+                </button>
+
+                <button
+                  onClick={() => navigateTo("habits")}
+                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-6 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Target className="w-8 h-8 mb-2 mx-auto" />
+                  Habit Tracker
                   <p className="text-sm font-normal opacity-90 mt-1">
-                    {t("gamingModeDesc")}
+                    Track your daily Islamic habits
                   </p>
                 </button>
 
@@ -134,9 +184,7 @@ function AppContent() {
                   >
                     <User className="w-8 h-8 mb-2 mx-auto" />
                     {t("dashboard")}
-                    <p className="text-sm font-normal opacity-90 mt-1">
-                      {t("dashboardDesc")}
-                    </p>
+                    <p className="text-sm font-normal opacity-90 mt-1">{t("dashboardDesc")}</p>
                   </button>
                 ) : (
                   <button
@@ -148,6 +196,38 @@ function AppContent() {
                     <p className="text-sm font-normal opacity-90 mt-1">{t("signInDesc")}</p>
                   </button>
                 )}
+
+                <button
+                  onClick={() => navigateTo("badges")}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-6 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Award className="w-8 h-8 mb-2 mx-auto" />
+                  Achievements
+                  <p className="text-sm font-normal opacity-90 mt-1">View your badges & rewards</p>
+                </button>
+              </div>
+
+              {/* Islamic Tools */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+                  Islamic Tools
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <button
+                    onClick={() => navigateTo("zakat")}
+                    className="flex items-center justify-center space-x-3 bg-white hover:bg-gray-50 border-2 border-emerald-200 hover:border-emerald-300 text-emerald-700 font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+                  >
+                    <Calculator className="w-6 h-6" />
+                    <span>Zakat Calculator</span>
+                  </button>
+                  <button
+                    onClick={() => navigateTo("calendar")}
+                    className="flex items-center justify-center space-x-3 bg-white hover:bg-gray-50 border-2 border-emerald-200 hover:border-emerald-300 text-emerald-700 font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+                  >
+                    <Calendar className="w-6 h-6" />
+                    <span>Islamic Calendar</span>
+                  </button>
+                </div>
               </div>
 
               {!user && (
@@ -180,7 +260,9 @@ function AppContent() {
               </div>
 
               <div className="bg-white rounded-lg shadow-lg p-8 text-left">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">{t("features")}</h3>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                  {t("features")}
+                </h3>
                 <div className="space-y-3 text-gray-600">
                   <div className="flex items-center">
                     <span className="text-2xl mr-3">🎮</span>
@@ -239,6 +321,16 @@ function AppContent() {
           title={t("backToHome")}
         >
           ← {t("home")}
+        </button>
+      )}
+
+      {(view === "habits" || view === "zakat" || view === "calendar" || view === "badges") && (
+        <button
+          onClick={() => navigateTo("home")}
+          className="fixed top-4 left-4 z-40 bg-white/80 backdrop-blur-sm text-emerald-700 hover:text-emerald-900 p-3 rounded-full shadow-lg transition-colors"
+          title={t("backToHome")}
+        >
+          ← Home
         </button>
       )}
 
